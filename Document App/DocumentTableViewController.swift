@@ -76,6 +76,20 @@ class DocumentTableViewController: UITableViewController {
         return documentListBundle
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // 1. Récuperer l'index de la ligne sélectionnée
+        let indexPath = tableView.indexPathForSelectedRow!
+        // 2. Récuperer le document correspondant à l'index
+        let document = DocumentFile.documentFiles[indexPath.row]
+        // 3. Cibler l'instance de DocumentViewController via le segue.destination
+        let documentViewController = segue.destination as! DocumentViewController
+        // 4. Caster le segue.destination en DocumentViewController
+        
+        
+        // 5. Remplir la variable imageName de l'instance de DocumentViewController avec le nom de l'image du document
+        
+    }
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()

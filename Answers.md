@@ -69,5 +69,18 @@ Il ajoute les interactions, les transitions entre les scènes et de gérer les f
 
 - Non car la Navigation Bar est un composant de la Navigation Controller.
 
+# Écran détail
+
+## Exercice 1
+
+### Expliquer ce qu’est un Segue et à quoi il sert.
+
+- C'est un flow qui permet de créer une transition entre les scènes.
+
+## Exercice 2
+
+### Qu’est-ce qu’une constraint ? A quoi sert-elle ? Quel est le lien avec AutoLayout ?
+
+- Une constraint permet de créer une règle qui s'applique sur comment l'élément doit positioner et dimensionner. AutoLayout utilise les constraints pour calculer automatique la taille et la position de l'élément.
 
 

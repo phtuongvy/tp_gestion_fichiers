@@ -11,4 +11,8 @@ tableView.register( UITableViewCell.self, forCellReuseIdentifier: "DocumentCell"
 
 dans override func viewDidLoad() {}
 
+### Binding
+
+- Assistants -> Drag et drop les éléments dans la DocumentTableViewCell et il y aura @IBOutlet qui permet d'utiliser le style subtitle et title pour afficher les titres correctement.
+
 

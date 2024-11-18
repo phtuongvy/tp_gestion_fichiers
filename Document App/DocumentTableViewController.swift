@@ -50,10 +50,13 @@ class DocumentTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "DocumentCell", for: indexPath)
-
-        cell.textLabel?.text = documents[ indexPath.row ].title
-        cell.detailTextLabel?.text = documents[ indexPath.row ].subtitle
+        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "DocumentCell")
+        
+        let document = documents[ indexPath.row ]
+        
+        cell.textLabel?.text = document.title
+        cell.detailTextLabel?.text = document.subtitle
+        cell.accessoryType = .disclosureIndicator
         
         return cell
     }

@@ -6,8 +6,15 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		6286DD382CEB24F800253C9C /* Answers.md in Resources */ = {isa = PBXBuildFile; fileRef = 6286DD372CEB24EE00253C9C /* Answers.md */; };
+		6286DD3C2CEB252200253C9C /* Notes.md in Resources */ = {isa = PBXBuildFile; fileRef = 6286DD3B2CEB251D00253C9C /* Notes.md */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		6286DD1F2CEB24B700253C9C /* Document App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Document App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6286DD372CEB24EE00253C9C /* Answers.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Answers.md; sourceTree = "<group>"; };
+		6286DD3B2CEB251D00253C9C /* Notes.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = Notes.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -45,6 +52,8 @@
 		6286DD162CEB24B700253C9C = {
 			isa = PBXGroup;
 			children = (
+				6286DD3B2CEB251D00253C9C /* Notes.md */,
+				6286DD372CEB24EE00253C9C /* Answers.md */,
 				6286DD212CEB24B700253C9C /* Document App */,
 				6286DD202CEB24B700253C9C /* Products */,
 			);
@@ -122,6 +131,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6286DD382CEB24F800253C9C /* Answers.md in Resources */,
+				6286DD3C2CEB252200253C9C /* Notes.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

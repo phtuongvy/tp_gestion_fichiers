@@ -41,6 +41,33 @@
 - Le raccourci pour indenter le code automatiquement : ⌃ + I <=> Ctrl + I
 - Pour commenter la sélection : ⌘ + : <=> Command + :
 
+# Délégation
+
+## Exercice 1 : Expliquer l’intérêt d’une propriété statique en programmation.
+
+- En Swift, l’utilisation d’une propriété statique permet un partage global des données, ce qui est idéal pour des constantes ou des états communs. Elle optimise la mémoire, car une seule instance est allouée, et reste accessible sans avoir besoin d'instancier la classe. Cela facilite la centralisation, la coordination et les configurations globales.
+
+Dans cet exemple, la propriété statique documents dans DocumentTableViewController stocke une liste partagée de fichiers (DocumentFile). Ces données sont accessibles directement via la classe, sans créer d'instance, permettant de centraliser et de simplifier la gestion des fichiers dans l'application.
+
+## Exercice 2
+
+### Expliquer pourquoi dequeueReusableCell est important pour les performances de l’application.
+
+- Parce qu'on ne duplique pas les cells, on les réutilise.
+
+
+# Navigation
+
+## Exercice 1
+
+### Que venons nous de faire en réalité ? Quel est le rôle du NavigationController ?
+
+- En réalité, nous venons de faire une navigation, un lien entre les pages de scènes, les écrans. Le rôle de navigation controller permet à gérer une stack de contrôleurs de vue en tant qu'un conteneur.
+Il ajoute les interactions, les transitions entre les scènes et de gérer les flows de navigation.
+
+### Est-ce que la NavigationBar est la même chose que le NavigationController ?
+
+- Non car la Navigation Bar est un composant de la Navigation Controller.
 
 
 

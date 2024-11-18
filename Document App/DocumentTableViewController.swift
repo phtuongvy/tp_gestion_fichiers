@@ -7,20 +7,44 @@
 
 import UIKit
 
-struct Document {
-    let title: String
-    let subtitle: String
+struct DocumentFile {
+    var title: String
+    var size: Int
+    var imageName: String? = nil
+    var url: URL
+    var type: String
+    
+    static var documentFiles: [DocumentFile] = [
+        DocumentFile(title: "Document 1", size: 100, imageName: nil, url: URL(string: "https://www.apple.com")!, type: "text/plain"),
+        DocumentFile(title: "Document 2", size: 200, imageName: nil, url: URL(string: "https://www.apple.com")!, type: "text/plain"),
+        DocumentFile(title: "Document 3", size: 300, imageName: nil, url: URL(string: "https://www.apple.com")!, type: "text/plain"),
+        DocumentFile(title: "Document 4", size: 400, imageName: nil, url: URL(string: "https://www.apple.com")!, type: "text/plain"),
+        DocumentFile(title: "Document 5", size: 500, imageName: nil, url: URL(string: "https://www.apple.com")!, type: "text/plain"),
+        DocumentFile(title: "Document 6", size: 600, imageName: nil, url: URL(string: "https://www.apple.com")!, type: "text/plain"),
+        DocumentFile(title: "Document 7", size: 700, imageName: nil, url: URL(string: "https://www.apple.com")!, type: "text/plain"),
+        DocumentFile(title: "Document 8", size: 800, imageName: nil, url: URL(string: "https://www.apple.com")!, type: "text/plain"),
+        DocumentFile(title: "Document 9", size: 900, imageName: nil, url: URL(string: "https://www.apple.com")!, type: "text/plain"),
+        DocumentFile(title: "Document 10", size: 1000, imageName: nil, url: URL(string: "https://www.apple.com")!, type: "text/plain")
+    ]
+}
+
+extension Int {
+    func formattedSize() -> String {
+        let formatter = ByteCountFormatter()
+        formatter.allowedUnits = [.useKB, .useMB]
+        formatter.countStyle = .file
+        return formatter.string(fromByteCount: Int64(self))
+    }
+}
+
+class DocumentTableViewCell: UITableViewCell {
+ 
+    @IBOutlet weak var subtitle: UILabel!
+    @IBOutlet weak var title: UILabel!
 }
 
 class DocumentTableViewController: UITableViewController {
     
-    let documents: [Document] = [
-        Document(title: "Document 1", subtitle: "Subtitle 1"),
-        Document(title: "Document 2", subtitle: "Subtitle 2"),
-        Document(title: "Document 3", subtitle: "Subtitle 3"),
-        Document(title: "Document 4", subtitle: "Subtitle 4"),
-        Document(title: "Document 5", subtitle: "Subtitle 5")
-    ]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,7 +55,6 @@ class DocumentTableViewController: UITableViewController {
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
         
-        tableView.register( UITableViewCell.self, forCellReuseIdentifier: "DocumentCell")
     }
 
     // MARK: - Table view data source
@@ -45,18 +68,19 @@ class DocumentTableViewController: UITableViewController {
         
         // #warning Incomplete implementation, return the number of rows
         
-        return documents.count
+        return DocumentFile.documentFiles.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "DocumentCell")
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "DocumentCell", for: indexPath) as? DocumentTableViewCell else {
+                fatalError("Unable to dequeue DocumentTableViewCell")
+            }
         
-        let document = documents[ indexPath.row ]
+        let documentFile = DocumentFile.documentFiles[ indexPath.row ]
         
-        cell.textLabel?.text = document.title
-        cell.detailTextLabel?.text = document.subtitle
-        cell.accessoryType = .disclosureIndicator
+        cell.title.text = documentFile.title
+        cell.subtitle.text = documentFile.size.formattedSize()
         
         return cell
     }

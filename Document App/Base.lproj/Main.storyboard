@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23094" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="l59-ZR-cyf">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23094" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="Z1Q-tS-L9W">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23084"/>
@@ -7,7 +7,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Document Table View Controller-->
+        <!--📑 Liste des documents-->
         <scene sceneID="FOP-SP-S0u">
             <objects>
                 <tableViewController id="l59-ZR-cyf" customClass="DocumentTableViewController" customModule="Document_App" customModuleProvider="target" sceneMemberID="viewController">
@@ -20,11 +20,11 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </imageView>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" textLabel="QKU-iZ-D7D" detailTextLabel="i6m-yv-3ku" style="IBUITableViewCellStyleSubtitle" id="RZQ-Wy-EBb">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="DocumentCell" textLabel="QKU-iZ-D7D" detailTextLabel="i6m-yv-3ku" style="IBUITableViewCellStyleSubtitle" id="RZQ-Wy-EBb" customClass="DocumentTableViewCell" customModule="Document_App" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="106" width="393" height="43.666667938232422"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="RZQ-Wy-EBb" id="LdY-os-Hqu">
-                                    <rect key="frame" x="0.0" y="0.0" width="393" height="43.666667938232422"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="362.66666666666669" height="43.666667938232422"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="QKU-iZ-D7D">
@@ -44,6 +44,10 @@
                                     </subviews>
                                 </tableViewCellContentView>
                                 <accessibility key="accessibilityConfiguration" identifier="DocumentCell"/>
+                                <connections>
+                                    <outlet property="subtitle" destination="i6m-yv-3ku" id="cFi-PB-COj"/>
+                                    <outlet property="title" destination="QKU-iZ-D7D" id="YIi-W1-ffl"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -51,9 +55,27 @@
                             <outlet property="delegate" destination="l59-ZR-cyf" id="h4c-w9-7Mg"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="EO7-fu-Jbd"/>
+                    <navigationItem key="navigationItem" title="📑 Liste des documents" id="EO7-fu-Jbd"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="giM-H2-71D" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1541.2213740458014" y="-679.57746478873241"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="y9E-Vo-FLn">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Z1Q-tS-L9W" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="xkN-zK-ahL">
+                        <rect key="frame" x="0.0" y="59" width="393" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="l59-ZR-cyf" kind="relationship" relationship="rootViewController" id="4pZ-Hn-R5A"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="mJF-S8-SzL" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="614.50381679389307" y="-679.57746478873241"/>
         </scene>

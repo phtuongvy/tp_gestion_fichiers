@@ -3,7 +3,7 @@
 
 - Sélectionner la Table View Controller et ensuite dans l'inspecteur d'attributs, il faut cocher Is Initial View Controller dans l'onglet View Controller.
 
-### Comment enregistrer un identifiant d'un composant du storyboard dans un ViewController ?
+### Comment enregistrer un identifiant d'un composant du storyboard dans un ViewController en programmation ?
 
 - Ajouter cette ligne :
 

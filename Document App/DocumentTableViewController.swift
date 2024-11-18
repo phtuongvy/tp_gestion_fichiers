@@ -14,18 +14,7 @@ struct DocumentFile {
     var url: URL
     var type: String
     
-    static var documentFiles: [DocumentFile] = [
-        DocumentFile(title: "Document 1", size: 100, imageName: nil, url: URL(string: "https://www.apple.com")!, type: "text/plain"),
-        DocumentFile(title: "Document 2", size: 200, imageName: nil, url: URL(string: "https://www.apple.com")!, type: "text/plain"),
-        DocumentFile(title: "Document 3", size: 300, imageName: nil, url: URL(string: "https://www.apple.com")!, type: "text/plain"),
-        DocumentFile(title: "Document 4", size: 400, imageName: nil, url: URL(string: "https://www.apple.com")!, type: "text/plain"),
-        DocumentFile(title: "Document 5", size: 500, imageName: nil, url: URL(string: "https://www.apple.com")!, type: "text/plain"),
-        DocumentFile(title: "Document 6", size: 600, imageName: nil, url: URL(string: "https://www.apple.com")!, type: "text/plain"),
-        DocumentFile(title: "Document 7", size: 700, imageName: nil, url: URL(string: "https://www.apple.com")!, type: "text/plain"),
-        DocumentFile(title: "Document 8", size: 800, imageName: nil, url: URL(string: "https://www.apple.com")!, type: "text/plain"),
-        DocumentFile(title: "Document 9", size: 900, imageName: nil, url: URL(string: "https://www.apple.com")!, type: "text/plain"),
-        DocumentFile(title: "Document 10", size: 1000, imageName: nil, url: URL(string: "https://www.apple.com")!, type: "text/plain")
-    ]
+    static var documentFiles: [DocumentFile] = []
 }
 
 extension Int {
@@ -45,9 +34,57 @@ class DocumentTableViewCell: UITableViewCell {
 
 class DocumentTableViewController: UITableViewController {
     
+    func listFileInBundle() -> [DocumentFile] {
+        
+        // créer un FileManager pour accéder au système de fichiers
+        let fm = FileManager.default
+        // chemin du répertoire du bundle principal
+        let path = Bundle.main.resourcePath!
+        // liste des fichiers du répertoire
+        let items = try! fm.contentsOfDirectory(atPath: path)
+        
+        // créer une liste pour contenir les documents
+        var documentListBundle = [DocumentFile]()
+        
+        // parcourir chaque fichier dans le répertoire
+        for item in items {
+            // si le fichier n'a pas d'extension DS_Store et il a extension .jpg
+            if !item.hasSuffix("DS_Store") && item.hasSuffix(".jpg") {
+                // construire le chemin pour le fichier image courant
+                let currentUrl = URL(fileURLWithPath: path + "/" + item)
+                
+                // récupérer les informations sur le fichier
+                let resourcesValues = try! currentUrl.resourceValues(forKeys: [.contentTypeKey, .nameKey, .fileSizeKey])
+                
+                // ajouter le document dans la liste des documents avec leur informations
+                documentListBundle.append(DocumentFile(
+                    
+                    // le nom du document
+                    title: resourcesValues.name!,
+                    // la taille du document si vide donc 0
+                    size: resourcesValues.fileSize ?? 0,
+                    // le fichier image
+                    imageName: item,
+                    // le chemin du fichier image courant
+                    url: currentUrl,
+                    //le type du fichier
+                    type: resourcesValues.contentType!.description)
+                )
+            }
+        }
+        // retourner la liste des documents
+        return documentListBundle
+    }
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // recharger les fichiers du bundle
+        DocumentFile.documentFiles = listFileInBundle()
+        
+        // recharger la TableView pour afficher les données
+        tableView.reloadData()
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false

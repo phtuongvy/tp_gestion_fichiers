@@ -15,4 +15,16 @@ dans override func viewDidLoad() {}
 
 - Assistants -> Drag et drop les éléments dans la DocumentTableViewCell et il y aura @IBOutlet qui permet d'utiliser le style subtitle et title pour afficher les titres correctement.
 
+- Des print debugs dans l'évènement sender peut aider à savoir si le sègue est bien binding. Exemple : if segue.identifier == "ShowDocumentSegue" { print "Segue triggered" }
 
+### QLPreviewController
+
+- Un QLPreviewController est utilisé pour afficher un aperçu des fichiers pris en charge (PDF, images,... ). Il fonctionne via un protocole QLPreviewControllerDataSource pour fournir les fichiers à afficher.
+
+- Pour naviguer à documentPreviewController qui était instancié en tant que QLPreviewController :
+self.navigationController?.pushViewController(documentPreviewController, animated: true)
+
+- Source de données pour le QLPreviewController :
+documentPreviewController.dataSource = self
+
+- file.startAccessingSecurityScopedResource() pour savoir si on peut accéder à ce fichier "file" ou pas, on accède temporairement à ce fichier.

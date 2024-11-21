@@ -83,4 +83,38 @@ Il ajoute les interactions, les transitions entre les scènes et de gérer les f
 
 - Une constraint permet de créer une règle qui s'applique sur comment l'élément doit positioner et dimensionner. AutoLayout utilise les constraints pour calculer automatique la taille et la position de l'élément.
 
+# QLPreviewController
+
+## Exercice 1 - QLPreview
+
+### Pourquoi serait-il plus pertinent de changer l’accessory de nos cellules pour un disclosureIndicator ?
+
+- Il serait plus pertinent de changer l'accessory de nos cellules pour un disclosureIndicator parce qu'il indique clairement une navigation possible. Il améliore l'ergonomie et il reste cohérent avec les standards iOS.
+
+## Exercice 2 - Importer un fichier au runtime
+
+### Expliquer ce qu'est un #selector en Swift
+
+- En Swift, #selector est une directive qui permet de faire une référence à une méthode forte typée de objective-c, elle est utilisée comme cibles d'actions dans les contrôles (exemple UIButton,...).
+
+### Que représente .add dans notre appel ?
+
+- .add est un élément de l'énumération UIBarButtonItem.SystemItem, c'est un bouton standard d'iOS, qui représente une icône + pour indiquer un ajout.
+
+### Expliquez également pourquoi XCode vous demande de mettre le mot clé @objc devant la fonction ciblée par le #selector
+
+- @objc est obligé pour indiqauer une méthode appartenant à objective-c, cela permet à des fonctionnalités comme UIBarButtonItem de l'appeler au moment de l'exécution.
+
+### Peut-on ajouter plusieurs boutons dans la barre de navigation ? Si oui, comment en code ?
+
+- Oui. Avec la propriété navigationItem.rightBarButtonItems ou navigationItem.leftBarButtonItems qui va être un tableau UIBarButtonItem.
+
+### À quoi sert la fonction defer ?
+
+- La fonction defer sert à garantir que le code soit exécuté juste avant que l'exécution quitte de la portée actuelle, même s'il y a une erreur ou une exception, il est souvent servi comme une fermeture de la portée.
+
+
+
+
+
 

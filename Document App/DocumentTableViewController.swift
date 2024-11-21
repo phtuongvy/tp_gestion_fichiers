@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import QuickLook
 
 struct DocumentFile {
     var title: String
@@ -15,6 +16,7 @@ struct DocumentFile {
     var type: String
     
     static var documentFiles: [DocumentFile] = []
+    static var documentUrl: URL?
 }
 
 extension Int {
@@ -26,8 +28,43 @@ extension Int {
     }
 }
 
+extension DocumentTableViewController: QLPreviewControllerDataSource {
+    func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
+        return 1
+    }
+    
+    func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
+        return DocumentFile.documentUrl! as QLPreviewItem
+    }
+}
+
+extension DocumentTableViewController: UIDocumentPickerDelegate {
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentAt url: URL) {
+        dismiss(animated: true)
+        
+        let selectedFileUrl = url
+        
+        if selectedFileUrl.startAccessingSecurityScopedResource() {
+            
+            copyFileToDocumentsDirectory(fromUrl: selectedFileUrl)
+            
+            loadFilesFromDocumentsDirectory()
+            
+            tableView.reloadData()
+            
+        } else { return }
+        
+        defer { selectedFileUrl.stopAccessingSecurityScopedResource() }
+        
+    }
+    func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
+        print("Document Picker was cancelled")
+    }
+    
+}
+
 class DocumentTableViewCell: UITableViewCell {
- 
+    
     @IBOutlet weak var subtitle: UILabel!
     @IBOutlet weak var title: UILabel!
 }
@@ -70,27 +107,13 @@ class DocumentTableViewController: UITableViewController {
                     //le type du fichier
                     type: resourcesValues.contentType!.description)
                 )
+                //                print(documentListBundle)
             }
         }
         // retourner la liste des documents
         return documentListBundle
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // 1. Récuperer l'index de la ligne sélectionnée
-        let indexPath = tableView.indexPathForSelectedRow!
-        // 2. Récuperer le document correspondant à l'index
-        let document = DocumentFile.documentFiles[indexPath.row]
-        // 3. Cibler l'instance de DocumentViewController via le segue.destination
-        let documentViewController = segue.destination as! DocumentViewController
-        // 4. Caster le segue.destination en DocumentViewController
-        
-        
-        // 5. Remplir la variable imageName de l'instance de DocumentViewController avec le nom de l'image du document
-        
-    }
-    
-
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -99,34 +122,27 @@ class DocumentTableViewController: UITableViewController {
         
         // recharger la TableView pour afficher les données
         tableView.reloadData()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addDocument))
         
     }
-
+    
     // MARK: - Table view data source
-
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        // #warning Incomplete implementation, return the number of rows
         
         return DocumentFile.documentFiles.count
     }
-
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "DocumentCell", for: indexPath) as? DocumentTableViewCell else {
-                fatalError("Unable to dequeue DocumentTableViewCell")
-            }
+            fatalError("Unable to dequeue DocumentTableViewCell")
+        }
         
         let documentFile = DocumentFile.documentFiles[ indexPath.row ]
         
@@ -136,50 +152,128 @@ class DocumentTableViewController: UITableViewController {
         return cell
     }
     
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        let document = DocumentFile.documentFiles[indexPath.row]
+        self.instantiateQLPreviewController(withUrl: document.url)
+        
     }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
+    
+    @objc func addDocument() {
+        
+        let documentPicker = UIDocumentPickerViewController(
+            forOpeningContentTypes: [.jpeg,.png,.pdf])
+        
+        documentPicker.delegate = self
+        documentPicker.modalPresentationStyle = .overFullScreen
+        
+        present(documentPicker, animated: true, completion: nil)
     }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
+    
+    func copyFileToDocumentsDirectory(fromUrl url: URL) {
+        // On récupère le dossier de l'application, dossier où nous avons le droit d'écrire nos fichiers
+        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        
+        // Nous créons une URL de destination pour le fichier
+        let destinationUrl = documentsDirectory.appendingPathComponent(url.lastPathComponent)
+        
+        do {
+            // Puis nous copions le fichier depuis l'URL source vers l'URL de destination
+            try FileManager.default.copyItem(at: url, to: destinationUrl)
+        } catch {
+            print(error)
+        }
     }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
+    
+    func loadFilesFromDocumentsDirectory() {
+        
+        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        
+        do {
+            let selectedFilesUrls = try! FileManager.default.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: [.fileSizeKey], options: .skipsHiddenFiles)
+            
+            let newDocuments = selectedFilesUrls.map {url in
+                return DocumentFile(title: url.lastPathComponent,
+                                    size: (try! url.resourceValues(forKeys: [.fileSizeKey]).fileSize) ?? 0,
+                                    url: url,
+                                    type: url.pathExtension)}
+            for newDocument in newDocuments {
+                // avoid duplication
+                if !DocumentFile.documentFiles.contains(where: { $0.url == newDocument.url }) {
+                    DocumentFile.documentFiles.append(newDocument)
+                }
+            }
+        } catch {
+            print( "Error loading files from documents directory: \(error)" )
+        }
+        
     }
-    */
-
+    
     /*
+     // Override to support conditional editing of the table view.
+     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+     // Return false if you do not want the specified item to be editable.
+     return true
+     }
+     */
+    
+    /*
+     // Override to support editing the table view.
+     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+     if editingStyle == .delete {
+     // Delete the row from the data source
+     tableView.deleteRows(at: [indexPath], with: .fade)
+     } else if editingStyle == .insert {
+     // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
+     }
+     }
+     */
+    
+    /*
+     // Override to support rearranging the table view.
+     override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
+     
+     }
+     */
+    
+    /*
+     // Override to support conditional rearranging of the table view.
+     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+     // Return false if you do not want the item to be re-orderable.
+     return true
+     }
+     */
+    
     // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    
+    //    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    //
+    //        // 1. Récuperer l'index de la ligne sélectionnée
+    //        let indexPath = tableView.indexPathForSelectedRow!
+    //
+    ////        print("Segue triggered for row \(indexPath.row)")
+    //
+    //        // 2. Récuperer le document correspondant à l'index
+    //        let document = DocumentFile.documentFiles[indexPath.row]
+    //
+    //        // 3. Cibler l'instance de DocumentViewController via le segue.destination
+    //        // 4. Caster le segue.destination en DocumentViewController
+    //        let documentViewController = segue.destination as! DocumentViewController
+    //
+    //        // 5. Remplir la variable imageName de l'instance de DocumentViewController avec le nom de l'image du document
+    //        documentViewController.imageName = document.imageName
+    //
+    //    }
+    
+    func instantiateQLPreviewController(withUrl url: URL) {
+        
+        DocumentFile.documentUrl = url
+        
+        let documentPreviewController = QLPreviewController()
+        documentPreviewController.dataSource = self
+        
+        self.navigationController?.pushViewController(documentPreviewController, animated: true)
+        
     }
-    */
-
+    
 }

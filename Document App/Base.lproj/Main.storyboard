@@ -3,7 +3,6 @@
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23084"/>
-        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -57,9 +56,6 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="📑 Liste des documents" id="EO7-fu-Jbd"/>
-                    <connections>
-                        <segue destination="P1V-e7-blb" kind="show" identifier="ShowDocumentSegue" id="6Jd-ZX-Jmv"/>
-                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="giM-H2-71D" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -83,39 +79,8 @@
             </objects>
             <point key="canvasLocation" x="614.50381679389307" y="-679.57746478873241"/>
         </scene>
-        <!--Document View Controller-->
-        <scene sceneID="kRn-pM-fHi">
-            <objects>
-                <viewController id="P1V-e7-blb" customClass="DocumentViewController" customModule="Document_App" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="JbI-oY-NV0">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="pexels-492318127-29411263.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="JBU-DP-wMw">
-                                <rect key="frame" x="0.0" y="308" width="393" height="237"/>
-                            </imageView>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="Ob8-D2-8RO"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="JBU-DP-wMw" firstAttribute="leading" secondItem="Ob8-D2-8RO" secondAttribute="leading" id="3qM-ce-JM2"/>
-                            <constraint firstItem="JBU-DP-wMw" firstAttribute="centerY" secondItem="JbI-oY-NV0" secondAttribute="centerY" id="JKd-3G-3PR"/>
-                            <constraint firstItem="JBU-DP-wMw" firstAttribute="top" secondItem="Ob8-D2-8RO" secondAttribute="top" constant="205" id="R00-oh-qrl"/>
-                            <constraint firstItem="JBU-DP-wMw" firstAttribute="centerX" secondItem="JbI-oY-NV0" secondAttribute="centerX" id="s51-Fr-KTS"/>
-                        </constraints>
-                    </view>
-                    <navigationItem key="navigationItem" id="s05-NU-s6P"/>
-                    <connections>
-                        <outlet property="imageView" destination="JBU-DP-wMw" id="2Ro-IU-OnT"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="HVQ-SE-6H7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1145.8015267175572" y="-1356.3380281690143"/>
-        </scene>
     </scenes>
     <resources>
-        <image name="pexels-492318127-29411263.jpg" width="6240" height="4160"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

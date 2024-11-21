@@ -16,6 +16,7 @@ struct DocumentFile {
     var type: String
     
     static var documentFiles: [DocumentFile] = []
+    static var importedFiles: [DocumentFile] = []
     static var documentUrl: URL?
 }
 
@@ -130,12 +131,23 @@ class DocumentTableViewController: UITableViewController {
     // MARK: - Table view data source
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return 2
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        return DocumentFile.documentFiles.count
+        if section == 0 {
+            return DocumentFile.importedFiles.count
+        } else {
+            return DocumentFile.documentFiles.count
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if section == 0 {
+            return "Importés"
+        } else {
+            return "Bundle"
+        }
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -144,7 +156,13 @@ class DocumentTableViewController: UITableViewController {
             fatalError("Unable to dequeue DocumentTableViewCell")
         }
         
-        let documentFile = DocumentFile.documentFiles[ indexPath.row ]
+        let documentFile: DocumentFile
+        
+        if indexPath.section == 0 {
+            documentFile = DocumentFile.importedFiles[ indexPath.row ]
+        } else {
+            documentFile = DocumentFile.documentFiles[ indexPath.row ]
+        }
         
         cell.title.text = documentFile.title
         cell.subtitle.text = documentFile.size.formattedSize()
@@ -192,15 +210,15 @@ class DocumentTableViewController: UITableViewController {
         do {
             let selectedFilesUrls = try! FileManager.default.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: [.fileSizeKey], options: .skipsHiddenFiles)
             
-            let newDocuments = selectedFilesUrls.map {url in
+            let importedFiles = selectedFilesUrls.map {url in
                 return DocumentFile(title: url.lastPathComponent,
                                     size: (try! url.resourceValues(forKeys: [.fileSizeKey]).fileSize) ?? 0,
                                     url: url,
                                     type: url.pathExtension)}
-            for newDocument in newDocuments {
+            for importedFile in importedFiles {
                 // avoid duplication
-                if !DocumentFile.documentFiles.contains(where: { $0.url == newDocument.url }) {
-                    DocumentFile.documentFiles.append(newDocument)
+                if !DocumentFile.importedFiles.contains(where: { $0.url == importedFile.url }) {
+                    DocumentFile.importedFiles.append(importedFile)
                 }
             }
         } catch {

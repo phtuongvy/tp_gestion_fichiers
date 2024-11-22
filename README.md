@@ -17,10 +17,9 @@ Découvrez l’utilisation d’une large gamme de composants UIKit comme les lis
 
 ## 🛠️ Objectifs techniques
 
-Cette application est bien plus qu’un gestionnaire de fichiers :
-	•	Exploration de l’écosystème iOS : Apprenez comment Swift et UIKit travaillent ensemble pour créer des interfaces utilisateur fluides et performantes.
-	•	Notions avancées de navigation : Utilisation de contrôleurs, gestion des transitions entre vues et configuration des vues détaillées.
-	•	Traitement des fichiers : Manipulez différents types de fichiers, explorez leurs propriétés et affichez leur contenu de manière dynamique.
+•	Exploration de l’écosystème iOS : Apprenez comment Swift et UIKit travaillent ensemble pour créer des interfaces utilisateur fluides et performantes. \
+•	Notions avancées de navigation : Utilisation de contrôleurs, gestion des transitions entre vues et configuration des vues détaillées. \
+•	Traitement des fichiers : Manipulez différents types de fichiers, explorez leurs propriétés et affichez leur contenu de manière dynamique.
 
 ## 📦 Architecture et composants
 

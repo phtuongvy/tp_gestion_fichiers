@@ -17,6 +17,7 @@ struct DocumentFile {
     
     static var documentFiles: [DocumentFile] = []
     static var importedFiles: [DocumentFile] = []
+    static var filteredFiles: [DocumentFile] = []
     static var documentUrl: URL?
 }
 
@@ -64,6 +65,24 @@ extension DocumentTableViewController: UIDocumentPickerDelegate {
     
 }
 
+extension DocumentTableViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        DocumentFile.filteredFiles = []
+        
+        if searchText.isEmpty {
+            DocumentFile.filteredFiles = DocumentFile.documentFiles
+        }
+        
+        for file in DocumentFile.documentFiles {
+            if file.title.lowercased().contains(searchText.lowercased()) {
+                DocumentFile.filteredFiles.append(file)
+            }
+        }
+        
+        tableView.reloadData()
+    }
+}
+
 class DocumentTableViewCell: UITableViewCell {
     
     @IBOutlet weak var subtitle: UILabel!
@@ -71,6 +90,8 @@ class DocumentTableViewCell: UITableViewCell {
 }
 
 class DocumentTableViewController: UITableViewController {
+    
+    @IBOutlet weak var searchBar: UISearchBar!
     
     func listFileInBundle() -> [DocumentFile] {
         
@@ -126,6 +147,8 @@ class DocumentTableViewController: UITableViewController {
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addDocument))
         
+        DocumentFile.filteredFiles = DocumentFile.documentFiles
+        
     }
     
     // MARK: - Table view data source
@@ -138,7 +161,7 @@ class DocumentTableViewController: UITableViewController {
         if section == 0 {
             return DocumentFile.importedFiles.count
         } else {
-            return DocumentFile.documentFiles.count
+            return DocumentFile.filteredFiles.count
         }
     }
     
@@ -161,7 +184,7 @@ class DocumentTableViewController: UITableViewController {
         if indexPath.section == 0 {
             documentFile = DocumentFile.importedFiles[ indexPath.row ]
         } else {
-            documentFile = DocumentFile.documentFiles[ indexPath.row ]
+            documentFile = DocumentFile.filteredFiles[ indexPath.row ]
         }
         
         cell.title.text = documentFile.title
@@ -172,7 +195,12 @@ class DocumentTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let document = DocumentFile.documentFiles[indexPath.row]
+        let document: DocumentFile
+        if indexPath.section == 0 {
+            document = DocumentFile.importedFiles[indexPath.row]
+        } else {
+            document = DocumentFile.filteredFiles[indexPath.row]
+        }
         self.instantiateQLPreviewController(withUrl: document.url)
         
     }
@@ -221,6 +249,7 @@ class DocumentTableViewController: UITableViewController {
                     DocumentFile.importedFiles.append(importedFile)
                 }
             }
+            
         } catch {
             print( "Error loading files from documents directory: \(error)" )
         }
@@ -269,7 +298,7 @@ class DocumentTableViewController: UITableViewController {
     //        // 1. Récuperer l'index de la ligne sélectionnée
     //        let indexPath = tableView.indexPathForSelectedRow!
     //
-    ////        print("Segue triggered for row \(indexPath.row)")
+    //       print("Segue triggered for row \(indexPath.row)")
     //
     //        // 2. Récuperer le document correspondant à l'index
     //        let document = DocumentFile.documentFiles[indexPath.row]

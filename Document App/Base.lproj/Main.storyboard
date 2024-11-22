@@ -15,12 +15,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <searchBar key="tableHeaderView" contentMode="redraw" id="qfV-dP-Jgz">
+                        <searchBar key="tableHeaderView" contentMode="redraw" placeholder="Recherchez vos fichiers..." id="Uzz-xw-oFI">
                             <rect key="frame" x="0.0" y="0.0" width="393" height="44"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <textInputTraits key="textInputTraits"/>
                             <connections>
-                                <outlet property="delegate" destination="l59-ZR-cyf" id="YLv-YI-A3Y"/>
+                                <outlet property="delegate" destination="l59-ZR-cyf" id="tYU-46-fMO"/>
                             </connections>
                         </searchBar>
                         <prototypes>
@@ -60,9 +60,6 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="📑 Liste des documents" id="EO7-fu-Jbd"/>
-                    <connections>
-                        <outlet property="searchBar" destination="qfV-dP-Jgz" id="T8i-xo-rt0"/>
-                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="giM-H2-71D" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

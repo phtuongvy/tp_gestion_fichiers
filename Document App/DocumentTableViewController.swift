@@ -17,7 +17,8 @@ struct DocumentFile {
     
     static var documentFiles: [DocumentFile] = []
     static var importedFiles: [DocumentFile] = []
-    static var filteredFiles: [DocumentFile] = []
+    static var filteredImportedFiles: [DocumentFile] = []
+    static var filteredBundleFiles: [DocumentFile] = []
     static var documentUrl: URL?
 }
 
@@ -41,23 +42,24 @@ extension DocumentTableViewController: QLPreviewControllerDataSource {
 }
 
 extension DocumentTableViewController: UIDocumentPickerDelegate {
-    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentAt url: URL) {
-        dismiss(animated: true)
+    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
         
-        let selectedFileUrl = url
+        guard let selectedFileUrl = urls.first else { return }
         
         if selectedFileUrl.startAccessingSecurityScopedResource() {
+            
+            defer { selectedFileUrl.stopAccessingSecurityScopedResource() }
             
             copyFileToDocumentsDirectory(fromUrl: selectedFileUrl)
             
             loadFilesFromDocumentsDirectory()
             
+            DocumentFile.filteredImportedFiles = DocumentFile.importedFiles
+            
             tableView.reloadData()
             
         } else { return }
-        
-        defer { selectedFileUrl.stopAccessingSecurityScopedResource() }
-        
+
     }
     func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
         print("Document Picker was cancelled")
@@ -67,15 +69,17 @@ extension DocumentTableViewController: UIDocumentPickerDelegate {
 
 extension DocumentTableViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        DocumentFile.filteredFiles = []
         
         if searchText.isEmpty {
-            DocumentFile.filteredFiles = DocumentFile.documentFiles
-        }
-        
-        for file in DocumentFile.documentFiles {
-            if file.title.lowercased().contains(searchText.lowercased()) {
-                DocumentFile.filteredFiles.append(file)
+            DocumentFile.filteredImportedFiles = DocumentFile.importedFiles
+            DocumentFile.filteredBundleFiles = DocumentFile.documentFiles
+        } else {
+            DocumentFile.filteredImportedFiles = DocumentFile.importedFiles.filter{
+                $0.title.lowercased().contains(searchText.lowercased())
+            }
+            
+            DocumentFile.filteredBundleFiles = DocumentFile.documentFiles.filter{
+                $0.title.lowercased().contains(searchText.lowercased())
             }
         }
         
@@ -142,12 +146,13 @@ class DocumentTableViewController: UITableViewController {
         // recharger les fichiers du bundle
         DocumentFile.documentFiles = listFileInBundle()
         
+        DocumentFile.filteredImportedFiles = DocumentFile.importedFiles
+        DocumentFile.filteredBundleFiles = DocumentFile.documentFiles
+        
         // recharger la TableView pour afficher les données
         tableView.reloadData()
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addDocument))
-        
-        DocumentFile.filteredFiles = DocumentFile.documentFiles
         
     }
     
@@ -159,9 +164,9 @@ class DocumentTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
-            return DocumentFile.importedFiles.count
+            return DocumentFile.filteredImportedFiles.count
         } else {
-            return DocumentFile.filteredFiles.count
+            return DocumentFile.filteredBundleFiles.count
         }
     }
     
@@ -182,9 +187,9 @@ class DocumentTableViewController: UITableViewController {
         let documentFile: DocumentFile
         
         if indexPath.section == 0 {
-            documentFile = DocumentFile.importedFiles[ indexPath.row ]
+            documentFile = DocumentFile.filteredImportedFiles[ indexPath.row ]
         } else {
-            documentFile = DocumentFile.filteredFiles[ indexPath.row ]
+            documentFile = DocumentFile.filteredBundleFiles[ indexPath.row ]
         }
         
         cell.title.text = documentFile.title
@@ -197,9 +202,9 @@ class DocumentTableViewController: UITableViewController {
         
         let document: DocumentFile
         if indexPath.section == 0 {
-            document = DocumentFile.importedFiles[indexPath.row]
+            document = DocumentFile.filteredImportedFiles[indexPath.row]
         } else {
-            document = DocumentFile.filteredFiles[indexPath.row]
+            document = DocumentFile.filteredBundleFiles[indexPath.row]
         }
         self.instantiateQLPreviewController(withUrl: document.url)
         
@@ -208,7 +213,7 @@ class DocumentTableViewController: UITableViewController {
     @objc func addDocument() {
         
         let documentPicker = UIDocumentPickerViewController(
-            forOpeningContentTypes: [.jpeg,.png,.pdf])
+            forOpeningContentTypes: [UTType.item])
         
         documentPicker.delegate = self
         documentPicker.modalPresentationStyle = .overFullScreen

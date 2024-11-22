@@ -1,3 +1,7 @@
+PHAM HUYNH Tuong Vy
+
+TREHOU Nicolas
+
 # 📁 File Viewer App
 Bienvenue dans File Viewer App, une application iOS polyvalente conçue pour explorer et manipuler des fichiers avec fluidité et simplicité. Cette application n’est pas seulement un outil pratique pour gérer vos documents, mais également une excellente démonstration de l’écosystème iOS, combinant des concepts essentiels de Swift, UIKit, et bien plus encore.
 

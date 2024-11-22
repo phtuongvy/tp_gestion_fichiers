@@ -24,14 +24,14 @@ Cette application est bien plus qu’un gestionnaire de fichiers :
 
 ## 📦 Architecture et composants
 
-•	Liste des fichiers : Affichée à l’aide d’une UITableView ou UICollectionView pour une navigation fluide.
-•	Vue détail : Construit avec des vues spécifiques en fonction du type de fichier (ex. : UIImageView pour les images, UITextView pour le texte).
+•	Liste des fichiers : Affichée à l’aide d’une UITableView ou UICollectionView pour une navigation fluide. \
+•	Vue détail : Construit avec des vues spécifiques en fonction du type de fichier (ex. : UIImageView pour les images, UITextView pour le texte). \
 •	Gestion des fichiers : Utilisation des APIs natives d’iOS comme FileManager pour manipuler les fichiers sur le système.
 
 ## 🔧 Pré-requis
 
-•	Xcode 14+
-•	iOS 15+
+•	Xcode 14+\n
+•	iOS 15+\n
 •	Langage : Swift
 
 

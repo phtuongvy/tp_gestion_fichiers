@@ -30,8 +30,8 @@ Cette application est bien plus qu’un gestionnaire de fichiers :
 
 ## 🔧 Pré-requis
 
-•	Xcode 14+\n
-•	iOS 15+\n
+•	Xcode 15+ \
+•	iOS 15+ \
 •	Langage : Swift
 
 
